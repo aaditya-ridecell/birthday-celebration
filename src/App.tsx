@@ -71,7 +71,7 @@ function App() {
 
   const envName = process.env.REACT_APP_BIRTHDAY_NAME || '';
   const envMessage = process.env.REACT_APP_BIRTHDAY_MESSAGE || "Wishing you the happiest birthday ever! You're amazing and I love you!";
-  const envDate = process.env.REACT_APP_BIRTHDAY_DATE || '2024-05-30';
+  const envDate = process.env.REACT_APP_BIRTHDAY_DATE || '';
 
 
   const [name, setName] = useState(envName);
