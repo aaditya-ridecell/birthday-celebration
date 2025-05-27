@@ -111,19 +111,6 @@ function App() {
   const handleGameWin = () => {
     setShowSurprise(true);
   };
-  
-  const resetSettings = () => {
-    localStorage.removeItem('birthday-name');
-    localStorage.removeItem('birthday-message');
-    localStorage.removeItem('birthday-date');
-    
-    setName('');
-    setMessage('');
-    setDate('');
-    setIsConfigured(false);
-    setShowSurprise(false);
-    setBirthdayDate(null);
-  };
 
   return (
     <AppContainer>
@@ -165,18 +152,6 @@ function App() {
             >
               Made with ❤️ for {name}
             </motion.p>
-            <motion.button 
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={resetSettings}
-              style={{ 
-                background: 'transparent', 
-                color: 'var(--panda-accent)',
-                marginTop: '1rem' 
-              }}
-            >
-              Reset Settings
-            </motion.button>
           </Footer>
         </>
       ) : (

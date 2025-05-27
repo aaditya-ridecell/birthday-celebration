@@ -21,7 +21,7 @@ const GameArea = styled.div`
   height: 300px;
   background: linear-gradient(to bottom, #dcedc8 0%, #8bc34a 100%);
   border-radius: 10px;
-  overflow: hidden;
+  overflow: visible;
   margin-top: 1rem;
   box-shadow: inset 0 0 10px rgba(0,0,0,0.2);
   
@@ -40,6 +40,7 @@ const Panda = styled(motion.div)`
   display: flex;
   flex-direction: column;
   align-items: center;
+  z-index: 10;
 `;
 
 const PandaHead = styled.div`
@@ -89,7 +90,7 @@ const PandaBody = styled.div`
   background-color: white;
   border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
   position: relative;
-  z-index: -1;
+  z-index: 1;
 `;
 
 const Bamboo = styled(motion.div)`
@@ -101,11 +102,11 @@ const Bamboo = styled(motion.div)`
   display: flex;
   flex-direction: column;
   align-items: center;
-  z-index: 0;
+  z-index: 2;
 `;
 
 const BambooNode = styled.div`
-  width: 25px;
+  width: 20px;
   height: 8px;
   background-color: #2e7d32;
   border-radius: 5px;
@@ -138,7 +139,22 @@ const GameMessage = styled(motion.div)`
   font-weight: bold;
 `;
 
-const GAME_WIDTH = 600;
+const CollectionEffect = styled(motion.div)`
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: var(--panda-accent);
+  color: white;
+  font-weight: bold;
+  font-size: 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 20;
+`;
+
+// We'll use the ref to get actual width
 
 interface BambooGameProps {
   onWin?: () => void;
@@ -150,6 +166,7 @@ const BambooGame: React.FC<BambooGameProps> = ({ onWin }) => {
   const [pandaPosition, setPandaPosition] = useState({ x: 30, y: 0 });
   const [bamboos, setBamboos] = useState<{id: number, x: number, height: number, scored: boolean}[]>([]);
   const [showWinMessage, setShowWinMessage] = useState(false);
+  const [collectionEffect, setCollectionEffect] = useState<{x: number, y: number, show: boolean}>({ x: 0, y: 0, show: false });
   const gameRef = useRef<HTMLDivElement>(null);
   
   const startGame = () => {
@@ -158,15 +175,18 @@ const BambooGame: React.FC<BambooGameProps> = ({ onWin }) => {
     setPandaPosition({ x: 30, y: 0 });
     setBamboos([]);
     setShowWinMessage(false);
+    setCollectionEffect({ x: 0, y: 0, show: false });
   };
 
   const movePanda = (direction: 'left' | 'right') => {
-    if (!isPlaying) return;
+    if (!isPlaying || !gameRef.current) return;
+    
+    const gameWidth = gameRef.current.offsetWidth;
     
     setPandaPosition(prev => {
       const newX = direction === 'left' 
         ? Math.max(10, prev.x - 40) 
-        : Math.min(GAME_WIDTH - 70, prev.x + 40);
+        : Math.min(gameWidth - 70, prev.x + 40);
       
       return { ...prev, x: newX };
     });
@@ -179,9 +199,21 @@ const BambooGame: React.FC<BambooGameProps> = ({ onWin }) => {
       return prev.map(bamboo => {
         if (
           !bamboo.scored &&
-          Math.abs(bamboo.x - pandaPosition.x) < 40 &&
+          Math.abs(bamboo.x - pandaPosition.x) < 60 &&
           bamboo.height > 0
         ) {
+          // Show collection effect
+          setCollectionEffect({
+            x: bamboo.x,
+            y: bamboo.height - 30,
+            show: true
+          });
+          
+          // Hide effect after animation completes
+          setTimeout(() => {
+            setCollectionEffect(prev => ({ ...prev, show: false }));
+          }, 800);
+          
           // Collect this bamboo
           setScore(s => {
             const newScore = s + 1;
@@ -209,8 +241,8 @@ const BambooGame: React.FC<BambooGameProps> = ({ onWin }) => {
       if (!gameRef.current) return;
       
       const width = gameRef.current.offsetWidth;
-      const randomX = Math.floor(Math.random() * (width - 100)) + 50;
-      const randomHeight = Math.floor(Math.random() * 50) + 100;
+      const randomX = Math.floor(Math.random() * (width - 40));
+      const randomHeight = Math.floor(Math.random() * 80) + 100;
       
       setBamboos(prev => [
         ...prev,
@@ -283,6 +315,24 @@ const BambooGame: React.FC<BambooGameProps> = ({ onWin }) => {
           </PandaHead>
           <PandaBody />
         </Panda>
+        
+        {collectionEffect.show && (
+          <CollectionEffect
+            style={{ 
+              left: `${collectionEffect.x}px`,
+              bottom: `${collectionEffect.y}px` 
+            }}
+            initial={{ scale: 0.5, opacity: 0 }}
+            animate={{ 
+              scale: 1.5, 
+              opacity: 1,
+              y: -30
+            }}
+            transition={{ duration: 0.8 }}
+          >
+            +1
+          </CollectionEffect>
+        )}
       </GameArea>
       
       <ScoreDisplay>Bamboo Collected: {score} / 5</ScoreDisplay>
