@@ -79,7 +79,7 @@ function App() {
   const [date, setDate] = useState(envDate);
   const [isConfigured, setIsConfigured] = useState(true); // Set to true to skip the configuration screen
   const [showSurprise, setShowSurprise] = useState(false);
-  const [birthdayDate, setBirthdayDate] = useState<Date | null>(new Date('2024-05-20')); // Same date as above
+  const [birthdayDate, setBirthdayDate] = useState<Date | null>(new Date(envDate)); // Same date as above
   
   // Check if we have stored settings
   useEffect(() => {
