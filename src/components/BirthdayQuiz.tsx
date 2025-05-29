@@ -246,7 +246,7 @@ const BirthdayQuiz: React.FC<BirthdayQuizProps> = ({ onComplete }) => {
           <>
             <QuizTitle>Birthday Knowledge Quiz</QuizTitle>
             <QuizDescription>
-              Think you know the birthday star well? Let's find out! Answer these questions to reveal how well you know her.
+              Let's Quiz the birthday star! 🎉 Answer these questions to reveal a special message.
             </QuizDescription>
             <SubmitButton
               whileHover={{ scale: 1.05 }}
