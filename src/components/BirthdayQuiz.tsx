@@ -229,10 +229,10 @@ const BirthdayQuiz: React.FC<BirthdayQuizProps> = ({ onComplete }) => {
   const isLastQuestion = currentQuestion === quizQuestions.length - 1;
   
   const resultMessage = 
-    score === quizQuestions.length - 1 ? "You know her so well! Perfect match! 💖" : 
-    score >= quizQuestions.length - 2 ? "Wow, you really know her well! 💕" : 
-    score >= quizQuestions.length / 2 ? "Not bad! You're getting there! 😊" : 
-    "Looks like you have more to learn about her! That's part of the fun! 😄";
+    score === quizQuestions.length - 1 ? "Amazing job! 💖" : 
+    score >= quizQuestions.length - 2 ? "Amazing job! 💖" : 
+    score >= quizQuestions.length / 2 ? "Amazing job! 💖" : 
+    "Amazing job! 💖";
 
   return (
     <>
