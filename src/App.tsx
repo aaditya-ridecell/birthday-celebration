@@ -6,6 +6,7 @@ import PandaHeader from './components/PandaHeader';
 import CountdownTimer from './components/CountdownTimer';
 import BirthdayMessage from './components/BirthdayMessage';
 import BambooGame from './components/BambooGame';
+import BirthdayQuiz from './components/BirthdayQuiz';
 
 const AppContainer = styled.div`
   max-width: 800px;
@@ -79,6 +80,7 @@ function App() {
   const [date, setDate] = useState(envDate);
   const [isConfigured, setIsConfigured] = useState(true); // Set to true to skip the configuration screen
   const [showSurprise, setShowSurprise] = useState(false);
+  const [showQuiz, setShowQuiz] = useState(false);
   const [birthdayDate, setBirthdayDate] = useState<Date | null>(new Date(envDate)); // Same date as above
   
   // Check if we have stored settings
@@ -109,6 +111,10 @@ function App() {
   };
   
   const handleGameWin = () => {
+    setShowQuiz(true);
+  };
+
+  const handleQuizComplete = () => {
     setShowSurprise(true);
   };
 
@@ -128,13 +134,21 @@ function App() {
             {birthdayDate && <CountdownTimer targetDate={birthdayDate} />}
           </Section>
           
-          {!showSurprise ? (
+          {!showQuiz && !showSurprise ? (
             <Section
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.4 }}
             >
               <BambooGame onWin={handleGameWin} />
+            </Section>
+          ) : showQuiz && !showSurprise ? (
+            <Section
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5 }}
+            >
+              <BirthdayQuiz onComplete={handleQuizComplete} />
             </Section>
           ) : (
             <Section
