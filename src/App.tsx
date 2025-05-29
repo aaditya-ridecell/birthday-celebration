@@ -70,7 +70,7 @@ const Footer = styled.footer`
 function App() {
 
   const envName = process.env.REACT_APP_BIRTHDAY_NAME || '';
-  const envMessage = process.env.REACT_APP_BIRTHDAY_MESSAGE || "Wishing you the happiest birthday ever! You're amazing and I love you!";
+  const envMessage = process.env.REACT_APP_BIRTHDAY_MESSAGE ? process.env.REACT_APP_BIRTHDAY_MESSAGE.replace(/\\n/g, '\n') : "Wishing you the happiest birthday ever! You're amazing and I love you!";
   const envDate = process.env.REACT_APP_BIRTHDAY_DATE || '';
 
 
@@ -192,7 +192,7 @@ function App() {
                 rows={4}
                 value={message} 
                 onChange={(e) => setMessage(e.target.value)} 
-                placeholder="Enter a special birthday message"
+                placeholder="Enter a special birthday message\nYou can use line breaks"
                 style={{ resize: 'vertical' }}
               />
             </InputGroup>

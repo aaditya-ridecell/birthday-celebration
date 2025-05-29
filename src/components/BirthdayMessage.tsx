@@ -106,7 +106,7 @@ const BirthdayMessage: React.FC<BirthdayMessageProps> = ({
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5 }}
           >
-            <p>{message}</p>
+            <p style={{ whiteSpace: 'pre-line' }}>{message}</p>
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
